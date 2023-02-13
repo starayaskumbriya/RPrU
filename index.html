@@ -1,0 +1,123 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/startPage.css">
+</head>
+<body>
+    
+    <form id="logPass" action="index.html" method="post">
+        <div class="mainDiv">
+            <div class="usernameWrapper"> 
+                <input class="username" id="username" type="text" placeholder="Username">
+            </div> 
+    
+            <div class="passwordWrapper"> 
+                <input class="password" id="password" placeholder="Password">
+            </div> 
+        </div>
+        
+        <!-- <input id="submit" class="submit" type="submit" value="Login" onclick="window.location.href='choiseTestPage/choiseTestPage.html';">   -->
+        <input id="submit" class="submit" type="submit" value="Login">  
+        
+    </form>
+    
+    <div class="signUp">
+        <p class="signUpP">Have not account yet? <a href="/signUP/signUp.html" class="signUpHref">sign Up</a></p>
+    </div>
+
+
+
+    <script>
+        async function SendLogPass(element) {
+            let logPassArr = [];
+            let loginValue = document.getElementById("username").value;
+            let passwordValue = document.getElementById("password").value;
+            logPassArr.push(loginValue, passwordValue);
+
+    
+
+            // if(json[0] === 1) {
+            //     // button.addEventListener("click", () => window.location.href='choiseTestPage/choiseTestPage.html');
+            //     // logPassArr.push(loginValue, createPasswordValue);
+            //     // button.click();
+            // }
+            // else alert("пароль или логин введен неверно");
+
+
+
+
+            element.preventDefault();
+            let logPassToServer = new FormData(document.getElementById('logPass'));
+            let logPassJSON = JSON.stringify(logPassArr);
+            logPassToServer.append('logPassJSON', logPassJSON);
+
+            try {
+                const response = await fetch('php/startPage.php', {
+                    method: 'POST',
+                    body: logPassToServer
+                });
+                let json = await response.json();
+
+                if(json[0] === 1) location.href = 'choiseTestPage/choiseTestPage.php';
+                else alert("пароль или логин введен неверно");
+                // console.log(json);
+            } 
+            catch (error) {
+                console.error('Ошибка:', error);
+            }
+        } 
+        logPass.onsubmit = SendLogPass;
+    </script>
+
+    <style>
+        
+* {
+    box-sizing: border-box;
+}
+
+.mainDiv {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -80%);
+}
+
+.username {
+    width: 280px;
+    /* width: 100%; */
+    height: 60px;
+    margin-bottom: 5px;
+}
+
+.password {
+    width: 280px;
+    height: 60px;
+    margin-bottom: 5px;
+}
+
+.submit {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    width: 280px;
+    height: 60px;
+    transform: translate(-50%, 42.5%);
+}
+
+.signUp {
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    margin-top: 72.5px;
+    transform: translate(-50%, 42.5%);
+}
+.signUpHref {
+    color: rgb(83,138,212);
+    text-decoration: none;
+}
+.signUpP {
+    margin-top: 0;
+}
+    </style>
+</body>
+</html>
